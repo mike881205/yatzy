@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import Constants from "../../constants/constants";
 import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
 import SlotRow from "../SlotRow";
 import ScoreRow from "../ScoreRow";
+import ButtonRow from "../ButtonRow";
 
 const Yatzy = () => {
 
@@ -13,6 +11,9 @@ const Yatzy = () => {
 
     const [scoreBoard, setBoard] = useState([topHands(), bottomHands()]);
     const [slots, setSlots] = useState(Slots());
+    const [gameOver, setGameOver] = useState(true);
+    const [roundOver, setRoundOver] = useState(true);
+    const [roll, setRoll] = useState(0);
 
     const totalHandPoints = board => {
         let total = 0;
@@ -20,12 +21,32 @@ const Yatzy = () => {
         return total;
     };
 
+    const startGame = () => {
+        setGameOver(false);
+        setRoundOver(false);
+    };
+
+    const nextRound = () => {
+        setRoll(0);
+        setRoundOver(false);
+        setSlots(Slots());
+    };
+
+    const endRound = () => {
+        setRoundOver(true);
+    };
+
+    const updateRoll = () => {
+        setRoll(prevRoll => prevRoll + 1);
+        if (roll + 1 === 3) setRoundOver(true);
+    };
+
     const shuffleSlots = () => {
         const getRandomIndex = () => {
             const min = Math.ceil(0);
             const max = Math.floor(5);
             return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
+        };
 
         const newSlots = slots.map(slot => {
             const index = getRandomIndex();
@@ -38,17 +59,25 @@ const Yatzy = () => {
         });
 
         setSlots(newSlots);
+        updateRoll();
     };
 
     return (
         <Container>
-            <SlotRow slots={slots} />
+            <SlotRow
+                roundOver={roundOver}
+                slots={slots}
+            />
 
-            <Row>
-                <Col>
-                    <Button variant="primary" onClick={shuffleSlots}>Shuffle</Button>{' '}
-                </Col>
-            </Row>
+            <ButtonRow
+                roll={roll}
+                roundOver={roundOver}
+                gameOver={gameOver}
+                shuffleSlots={shuffleSlots}
+                startGame={startGame}
+                nextRound={nextRound}
+                endRound={endRound}
+            />
 
             <ScoreRow
                 scoreBoard={scoreBoard}

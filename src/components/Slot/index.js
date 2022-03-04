@@ -3,7 +3,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-const Slot = ({ slot }) => {
+const Slot = ({ slot, roundOver }) => {
     const { value, image, held } = slot;
     return (
         <Col>
@@ -14,7 +14,7 @@ const Slot = ({ slot }) => {
             </Row>
             <Row>
                 <Col>
-                    <Button variant={held ? "danger" : "warning"}>{held ? "Held" : "Hold"}</Button>{' '}
+                    <Button variant={held ? "danger" : "warning"} disabled={roundOver}>{held ? "Held" : "Hold"}</Button>{' '}
                 </Col>
             </Row>
         </Col>

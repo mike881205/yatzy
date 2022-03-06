@@ -33,7 +33,7 @@ const ButtonRow = ({ shuffleSlots, roll, roundOver, gameOver, startGame, nextRou
                                     <Button variant="primary" onClick={() => shuffleSlots()}>Shuffle</Button>{' '}
                                 </Col>
                                 <Col>
-                                    <Button variant="danger" onClick={() => endRound()}>End Round</Button>{' '}
+                                    <Button variant="danger" disabled={roll === 0} onClick={() => endRound()}>End Round</Button>{' '}
                                 </Col>
                             </Row>
                 }

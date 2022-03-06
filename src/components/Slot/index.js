@@ -3,7 +3,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-const Slot = ({ slot, roundOver }) => {
+const Slot = ({ slot, roll, roundOver, holdSlot }) => {
     const { value, image, held } = slot;
     return (
         <Col>
@@ -14,7 +14,7 @@ const Slot = ({ slot, roundOver }) => {
             </Row>
             <Row>
                 <Col>
-                    <Button variant={held ? "danger" : "warning"} disabled={roundOver}>{held ? "Held" : "Hold"}</Button>{' '}
+                    <Button variant={held ? "danger" : "warning"} disabled={roll === 0 || roundOver} onClick={() => holdSlot(slot)}>{held ? "Held" : "Hold"}</Button>{' '}
                 </Col>
             </Row>
         </Col>

@@ -66,6 +66,7 @@ const Constants = {
                 used: false,
                 removed: false,
                 valid: false,
+                removeHand: false,
                 value: 1,
                 points: 0
             },
@@ -74,6 +75,7 @@ const Constants = {
                 used: false,
                 removed: false,
                 valid: false,
+                removeHand: false,
                 value: 2,
                 points: 0
             },
@@ -82,6 +84,7 @@ const Constants = {
                 used: false,
                 removed: false,
                 valid: false,
+                removeHand: false,
                 value: 3,
                 points: 0
             },
@@ -90,6 +93,7 @@ const Constants = {
                 used: false,
                 removed: false,
                 valid: false,
+                removeHand: false,
                 value: 4,
                 points: 0
             },
@@ -98,6 +102,7 @@ const Constants = {
                 used: false,
                 removed: false,
                 valid: false,
+                removeHand: false,
                 value: 5,
                 points: 0
             },
@@ -106,6 +111,7 @@ const Constants = {
                 used: false,
                 removed: false,
                 valid: false,
+                removeHand: false,
                 value: 6,
                 points: 0
             },
@@ -120,6 +126,7 @@ const Constants = {
                 used: false,
                 removed: false,
                 valid: false,
+                removeHand: false,
                 value: null,
                 points: 0
             },
@@ -128,6 +135,7 @@ const Constants = {
                 used: false,
                 removed: false,
                 valid: false,
+                removeHand: false,
                 value: null,
                 points: 0
             },
@@ -136,6 +144,7 @@ const Constants = {
                 used: false,
                 removed: false,
                 valid: false,
+                removeHand: false,
                 value: 25,
                 points: 0
             },
@@ -144,6 +153,7 @@ const Constants = {
                 used: false,
                 removed: false,
                 valid: false,
+                removeHand: false,
                 value: 30,
                 points: 0
             },
@@ -152,6 +162,7 @@ const Constants = {
                 used: false,
                 removed: false,
                 valid: false,
+                removeHand: false,
                 value: 40,
                 points: 0
             },
@@ -160,6 +171,7 @@ const Constants = {
                 used: false,
                 removed: false,
                 valid: false,
+                removeHand: false,
                 value: null,
                 points: 0
             },
@@ -168,6 +180,7 @@ const Constants = {
                 used: false,
                 removed: false,
                 valid: false,
+                removeHand: false,
                 value: 50,
                 points: 0
             },
@@ -176,6 +189,7 @@ const Constants = {
                 removed: false,
                 valid: false,
                 value: 100,
+                count: 0,
                 points: 0
             }
         ];

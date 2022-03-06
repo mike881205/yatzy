@@ -14,6 +14,7 @@ const Yatzy = () => {
     const [gameOver, setGameOver] = useState(true);
     const [roundOver, setRoundOver] = useState(true);
     const [roll, setRoll] = useState(0);
+    const [selected, setSelected] = useState(false);
 
     const totalHandPoints = board => {
         let total = 0;
@@ -57,7 +58,7 @@ const Yatzy = () => {
         const bottomHands = [...scoreBoard[1]];
 
         const finalVals = slots.map(slot => slot.value).sort((a, b) => a - b);
-        // const finalVals = [1,2,3,4,6]
+        // const finalVals = [2,2,3,3,3]
 
         const valTotal = () => {
             let sum = 0;
@@ -72,6 +73,8 @@ const Yatzy = () => {
             });
         };
 
+        const uniqueVals = filterVals();
+
         const valCount = () => {
             const counts = {};
             finalVals.forEach(val => { counts[val] = (counts[val] || 0) + 1; });
@@ -82,7 +85,6 @@ const Yatzy = () => {
 
         const checkStraights = () => {
 
-            const uniqueVals = filterVals();
             let consecutive = 1;
 
             for (let i = 1; i < uniqueVals.length; i++) {
@@ -156,13 +158,13 @@ const Yatzy = () => {
                                 bottomHands[1].points = valTotal();
                             };
 
-                            if (!bottomHands[7].used && !bottomHands[7].removed) {
+                            if (!bottomHands[6].used && !bottomHands[6].removed) {
+                                bottomHands[6].valid = true;
+                                bottomHands[6].points = bottomHands[6].value;
+                            }
+                            else if (!bottomHands[6].removed && bottomHands[6].used) {
                                 bottomHands[7].valid = true;
                                 bottomHands[7].points = bottomHands[7].value;
-                            }
-                            else if (!bottomHands[7].removed && bottomHands[7].used) {
-                                bottomHands[8].valid = true;
-                                bottomHands[8].points = bottomHands[8].value;
                             };
                             break;
                         default:
@@ -177,11 +179,10 @@ const Yatzy = () => {
             };
         };
 
-        const checkChance = () => {
-            if (!bottomHands[6].used && !bottomHands[6].removed) {
-                bottomHands[6].valid = true;
-                bottomHands[6].points = valCount();
-            };
+        // Check Chance
+        if (!bottomHands[5].used && !bottomHands[6].removed) {
+            bottomHands[5].valid = true;
+            bottomHands[5].points = valTotal();
         };
 
         // Check First Scoreboard
@@ -195,7 +196,6 @@ const Yatzy = () => {
         });
 
         // Check Second Scoreboard
-        // checkChance();
         checkDuplicates();
         checkStraights();
 
@@ -237,6 +237,7 @@ const Yatzy = () => {
                 roll={roll}
                 roundOver={roundOver}
                 gameOver={gameOver}
+                selected={selected}
                 shuffleSlots={shuffleSlots}
                 startGame={startGame}
                 nextRound={nextRound}

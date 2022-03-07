@@ -4,6 +4,7 @@ import Container from 'react-bootstrap/Container';
 import SlotRow from "../SlotRow";
 import BoardRow from "../BoardRow";
 import ButtonRow from "../ButtonRow";
+import HandModal from "../HandModal";
 
 const Yatzy = () => {
 
@@ -15,6 +16,17 @@ const Yatzy = () => {
     const [roundOver, setRoundOver] = useState(true);
     const [roll, setRoll] = useState(0);
     const [selected, setSelected] = useState(false);
+    const [showModal, setShow] = useState(false);
+    const [modalContent, setContent] = useState({name: '', points: ''});
+
+    const handleClose = () => {
+        setContent({name: '', points: ''});
+        setShow(false);
+    };
+    const handleShow = hand => {
+        setContent(hand);
+        setShow(true);
+    };
 
     const totalHandPoints = board => {
         let total = 0;
@@ -245,8 +257,15 @@ const Yatzy = () => {
             />
 
             <BoardRow
+                handleShow={handleShow}
                 scoreBoard={scoreBoard}
                 totalHandPoints={totalHandPoints}
+            />
+
+            <HandModal
+                show={showModal}
+                modalContent={modalContent}
+                handleClose={handleClose}
             />
         </Container>
     );

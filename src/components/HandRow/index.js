@@ -2,7 +2,7 @@ import React from "react";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-const HandRow = ({ hand }) => {
+const HandRow = ({ hand, handleShow }) => {
 
     const {points, used, removed, valid, removeHand} = hand;
 
@@ -17,6 +17,7 @@ const HandRow = ({ hand }) => {
                 :
                 ''
             }
+            onClick={() => handleShow({name: hand.hand, points: points})}
         >
             <Col><p>{hand.hand}</p></Col>
             <Col><p>{points}</p></Col>

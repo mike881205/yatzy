@@ -3,7 +3,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import HandRow from "../HandRow";
 
-const BoardRow = ({ scoreBoard, totalHandPoints }) => {
+const BoardRow = ({ scoreBoard, handleShow, totalHandPoints }) => {
 
     const topHands = scoreBoard[0];
     const bottomHands = scoreBoard[1];
@@ -17,7 +17,7 @@ const BoardRow = ({ scoreBoard, totalHandPoints }) => {
             <Col>
                 <Row>
                     <Col>
-                        {scoreBoard[0].map((hand, i) => { return <HandRow key={`top ${i}`} hand={hand} /> })}
+                        {scoreBoard[0].map((hand, i) => { return <HandRow key={`top ${i}`} handleShow={handleShow} hand={hand} /> })}
                         <Row >
                             <Col><p>Top Bonus</p></Col>
                             {/* <Col><p>{topBonus()}</p></Col> */}
@@ -28,7 +28,7 @@ const BoardRow = ({ scoreBoard, totalHandPoints }) => {
                         </Row>
                     </Col>
                     <Col>
-                        {scoreBoard[1].map((hand, i) => { return <HandRow key={`bottom ${i}`} hand={hand} /> })}
+                        {scoreBoard[1].map((hand, i) => { return <HandRow key={`bottom ${i}`} handleShow={handleShow} hand={hand} /> })}
                         <Row >
                             <Col><p>Top Total</p></Col>
                             {/* <Col><p>{bottomTotal}</p></Col> */}

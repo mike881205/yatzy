@@ -177,20 +177,19 @@ const Constants = {
             },
             {
                 hand: 'Yatzy',
-                used: false,
                 removed: false,
                 valid: false,
-                removeHand: false,
                 value: 50,
                 points: 0
             },
             {
                 hand: 'Yatzy Bonus',
+                used: false,
                 removed: false,
                 valid: false,
                 value: 100,
                 count: 0,
-                points: 100
+                points: 0
             }
         ];
         return hands;

@@ -9,25 +9,26 @@ import HandModal from "../HandModal";
 const Yatzy = () => {
 
     const { Dice, Slots, topHands, bottomHands } = Constants;
+    const nullHand = () => { return { name: '', points: '', valid: '', remove: '', used: '', removed: '', board: '', index: '' }}
 
     const [scoreBoard, setBoard] = useState([topHands(), bottomHands()]);
     const [slots, setSlots] = useState(Slots());
     const [gameOver, setGameOver] = useState(true);
     const [roundOver, setRoundOver] = useState(true);
     const [roll, setRoll] = useState(0);
-    const [selectedHand, setSelected] = useState(null);
+    const [selectedHand, setSelected] = useState(nullHand());
+    const [validHand, setValid] = useState(false)
     const [showModal, setShow] = useState(false);
-    const [modalContent, setContent] = useState({ name: '', points: '', board: '', index: '' });
     const [topScore, setTopScore] = useState(0);
     const [bottomScore, setBottomScore] = useState(0);
 
     const handleClose = () => {
-        setContent({ name: '', points: '', board: '', index: '' });
+        setSelected(nullHand());
         setShow(false);
     };
 
     const handleShow = hand => {
-        setContent(hand);
+        setSelected(hand);
         setShow(true);
     };
 
@@ -39,7 +40,8 @@ const Yatzy = () => {
     const nextRound = () => {
         setRoll(0);
         setSlots(Slots());
-        setSelected(null);
+        setSelected(nullHand());
+        setValid(false);
         setRoundOver(false);
     };
 
@@ -148,7 +150,6 @@ const Yatzy = () => {
                 if (countObj[key] > 1) {
                     switch (countObj[key]) {
                         case 2:
-                            console.log(`${key}'s: ${countObj[key]}`)
                             if (!bottomHands[2].used && !bottomHands[2].removed) FHdouble = true;
                             break;
                         case 3:
@@ -205,17 +206,18 @@ const Yatzy = () => {
         };
 
         const checkRemoval = () => {
-            let validHand = false;
+            let valid = false;
             board.forEach(array => {
-                array.forEach(hand => { if (hand.valid) validHand = true });
+                array.forEach(hand => { if (hand.valid) valid = true });
             });
-            if (!validHand) {
+            if (!valid) {
                 board.forEach(array => {
                     array.forEach(hand => {
                         if (hand.hand !== 'Yatzy Bonus' && !hand.used && !hand.removed) hand.removeHand = true
                     });
                 });
-            };
+            }
+            else {setValid(true)};
         };
 
         // Check Chance
@@ -245,16 +247,35 @@ const Yatzy = () => {
     const selectHand = hand => {
         const { board, index, points } = hand;
 
-        if (scoreBoard[board][index].valid) {
-            if (board === 1 && index === 7) { scoreBoard[board][index].count++ }
-            else { scoreBoard[board][index].used = true };
-        }
-        else if (scoreBoard[board][index].removeHand) {
-            scoreBoard[board][index].removed = true;
-            if (board === 1 && index === 6) scoreBoard[board][7].removed = true;
+        const checkGameOver = () => {
+            let unused = false;
+            scoreBoard.forEach(board => {
+                board.forEach(hand => {
+                    hand.valid = false;
+                    hand.removeHand = false;
+                    if (!hand.used && !hand.removed) unused = true;
+                });
+            });
+            if (!unused) alert('gameOver');
         };
 
-        if (scoreBoard[board][index].used) {
+        if (hand.valid) {
+            if (board === 1 && index === 7) {
+                scoreBoard[board][index].count++;
+                scoreBoard[board][index].points = scoreBoard[board][index].count * scoreBoard[board][index].value
+            }
+            scoreBoard[board][index].used = true;
+            hand.used = true;
+            hand.valid = false;
+        }
+        else if (hand.remove) {
+            scoreBoard[board][index].removed = true;
+            if (board === 1 && index === 6) scoreBoard[board][7].removed = true;
+            hand.removed = true;
+            hand.remove = false;
+        };
+
+        if (scoreBoard[board][index].used || (board === 1 && index === 7)) {
             switch (board) {
                 case 0:
                     setTopScore(prevScore => prevScore + points);
@@ -264,24 +285,15 @@ const Yatzy = () => {
                     break;
                 default:
                     break;
-            }
-        }
+            };
+        };
+
+        console.log(hand)
 
         handleClose();
         setBoard([...scoreBoard]);
         setSelected(hand);
-
-        let unused = false;
-
-        scoreBoard.forEach(board => {
-            board.forEach(hand => {
-                hand.valid = false;
-                hand.removeHand = false;
-                if (!hand.used && !hand.removed) unused = true;
-            });
-        });
-
-        if (!unused) alert('gameOver')
+        checkGameOver();
     };
 
     return (
@@ -298,6 +310,7 @@ const Yatzy = () => {
                 roundOver={roundOver}
                 gameOver={gameOver}
                 selectedHand={selectedHand}
+                validHand={validHand}
                 shuffleSlots={shuffleSlots}
                 startGame={startGame}
                 nextRound={nextRound}
@@ -313,7 +326,7 @@ const Yatzy = () => {
 
             <HandModal
                 show={showModal}
-                modalContent={modalContent}
+                selectedHand={selectedHand}
                 handleClose={handleClose}
                 selectHand={selectHand}
             />

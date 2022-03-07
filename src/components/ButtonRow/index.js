@@ -3,7 +3,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-const ButtonRow = ({ shuffleSlots, roll, roundOver, gameOver, selectedHand, startGame, nextRound, endRound }) => {
+const ButtonRow = ({ shuffleSlots, roll, roundOver, gameOver, selectedHand, validHand, startGame, nextRound, endRound }) => {
+
+    const {used, removed} = selectedHand;
 
     return (
         <Row>
@@ -22,10 +24,10 @@ const ButtonRow = ({ shuffleSlots, roll, roundOver, gameOver, selectedHand, star
                         </Row>
                         :
                         roundOver ?
-                            selectedHand === null ?
+                            !removed && !used ?
                                 <Row>
                                     <Col>
-                                        <h3>Select A Hand</h3>
+                                        <h3>{!validHand ? 'Select Hand to Remove' : 'Select a Hand'}</h3>
                                     </Col>
                                 </Row>
                                 :

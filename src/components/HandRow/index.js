@@ -8,7 +8,7 @@ const HandRow = ({ hand, board, index, handleShow }) => {
 
     const handleClick = e => {
         const btnClass = e.currentTarget.className;
-        if (!btnClass.includes('disabled')) handleShow({ name: hand.hand, points: points, board: board, index: index })
+        if (!btnClass.includes('disabled')) handleShow({ name: hand.hand, points: points, valid: valid, remove: removeHand, used: used, removed: removed, board: board, index: index })
     }
 
     return (
@@ -24,7 +24,7 @@ const HandRow = ({ hand, board, index, handleShow }) => {
             }
             onClick={e => handleClick(e)}
         >
-            <Col><p>{hand.hand === 'Yatzy Bonus' ? `${hand.hand} x${hand.count}` : hand.hand}</p></Col>
+            <Col><p>{hand.hand === 'Yatzy Bonus' ? valid ? `${hand.hand}` : `${hand.hand} x${hand.count}` : hand.hand}</p></Col>
             <Col><p>{points}</p></Col>
         </Row>
     );

@@ -11,14 +11,20 @@ const HandRow = ({ hand, board, index, handleShow }) => {
         if (!btnClass.includes('disabled')) handleShow({ name: hand.hand, points: points, valid: valid, remove: removeHand, used: used, removed: removed, board: board, index: index })
     }
 
+    if (used || removed) console.log(hand)
+
     return (
         <Row
+            style={{
+                margin: '1%',
+                border: 'solid black'
+            }}
             className={
                 valid || removeHand ?
                     valid ? 'btn-info' : 'btn-danger'
                     :
                     used || removed ?
-                        used ? 'btn-success disabled' : 'btn-secondary disabled'
+                        used ? 'btn-success disabled' : 'btn-dark disabled'
                         :
                         'disabled'
             }

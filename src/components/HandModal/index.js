@@ -9,7 +9,7 @@ const HandModal = ({ show, handleClose, selectedHand, selectHand }) => {
 
     return (
         <Modal show={show} onHide={handleClose}>
-            <Modal.Body> {remove ? `Rmove "${name}"?` : `Select "${name}" for ${points} point(s)?`}</Modal.Body>
+            <Modal.Body> {remove ? `Remove "${name}"?` : `Select "${name}" for ${points} point(s)?`}</Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>Nope!</Button>
                 <Button variant="primary" onClick={() => selectHand(selectedHand)}>Yes</Button>

@@ -2,24 +2,29 @@ import React from "react";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-const HandRow = ({ hand, handleShow }) => {
+const HandRow = ({ hand, board, index, handleShow }) => {
 
-    const {points, used, removed, valid, removeHand} = hand;
+    const { points, used, removed, valid, removeHand } = hand;
+
+    const handleClick = e => {
+        const btnClass = e.currentTarget.className;
+        if (!btnClass.includes('disabled')) handleShow({ name: hand.hand, points: points, board: board, index: index })
+    }
 
     return (
-        <Row 
+        <Row
             className={
-                used || removed ?
-                used ? 'btn-success' : 'btn-secondary'
-                :
                 valid || removeHand ?
-                valid ? 'btn-info' : 'btn-danger'
-                :
-                ''
+                    valid ? 'btn-info' : 'btn-danger'
+                    :
+                    used || removed ?
+                        used ? 'btn-success disabled' : 'btn-secondary disabled'
+                        :
+                        'disabled'
             }
-            onClick={() => handleShow({name: hand.hand, points: points})}
+            onClick={e => handleClick(e)}
         >
-            <Col><p>{hand.hand}</p></Col>
+            <Col><p>{hand.hand === 'Yatzy Bonus' ? `${hand.hand} x${hand.count}` : hand.hand}</p></Col>
             <Col><p>{points}</p></Col>
         </Row>
     );

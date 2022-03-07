@@ -190,7 +190,7 @@ const Constants = {
                 valid: false,
                 value: 100,
                 count: 0,
-                points: 0
+                points: 100
             }
         ];
         return hands;

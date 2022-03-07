@@ -3,7 +3,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-const ButtonRow = ({ shuffleSlots, roll, roundOver, gameOver, selected, startGame, nextRound, endRound }) => {
+const ButtonRow = ({ shuffleSlots, roll, roundOver, gameOver, selectedHand, startGame, nextRound, endRound }) => {
 
     return (
         <Row>
@@ -22,11 +22,18 @@ const ButtonRow = ({ shuffleSlots, roll, roundOver, gameOver, selected, startGam
                         </Row>
                         :
                         roundOver ?
-                            <Row>
-                                <Col>
-                                    <Button variant="success" disabled={!selected} onClick={() => nextRound()}>Next Round</Button>{' '}
-                                </Col>
-                            </Row>
+                            selectedHand === null ?
+                                <Row>
+                                    <Col>
+                                        <h3>Select A Hand</h3>
+                                    </Col>
+                                </Row>
+                                :
+                                <Row>
+                                    <Col>
+                                        <Button variant="success" onClick={() => nextRound()}>Next Round</Button>{' '}
+                                    </Col>
+                                </Row>
                             :
                             <Row>
                                 <Col>

@@ -3,7 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
 
-const HandModal = ({ show, modalContent, handleClose }) => {
+const HandModal = ({ show, modalContent, handleClose, selectHand }) => {
 
     const {name, points} = modalContent;
 
@@ -15,7 +15,7 @@ const HandModal = ({ show, modalContent, handleClose }) => {
             <Modal.Body>Select "{name}" for {points} point(s)?</Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>Nope!</Button>
-                <Button variant="primary" onClick={handleClose}>Yes</Button>
+                <Button variant="primary" onClick={() => selectHand(modalContent)}>Yes</Button>
             </Modal.Footer>
         </Modal>
     );

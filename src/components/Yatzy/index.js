@@ -15,23 +15,20 @@ const Yatzy = () => {
     const [gameOver, setGameOver] = useState(true);
     const [roundOver, setRoundOver] = useState(true);
     const [roll, setRoll] = useState(0);
-    const [selected, setSelected] = useState(false);
+    const [selectedHand, setSelected] = useState(null);
     const [showModal, setShow] = useState(false);
-    const [modalContent, setContent] = useState({name: '', points: ''});
+    const [modalContent, setContent] = useState({ name: '', points: '', board: '', index: '' });
+    const [topScore, setTopScore] = useState(0);
+    const [bottomScore, setBottomScore] = useState(0);
 
     const handleClose = () => {
-        setContent({name: '', points: ''});
+        setContent({ name: '', points: '', board: '', index: '' });
         setShow(false);
     };
+
     const handleShow = hand => {
         setContent(hand);
         setShow(true);
-    };
-
-    const totalHandPoints = board => {
-        let total = 0;
-        board.forEach(hand => total + hand.points);
-        return total;
     };
 
     const startGame = () => {
@@ -40,16 +37,9 @@ const Yatzy = () => {
     };
 
     const nextRound = () => {
-        scoreBoard.forEach(board => {
-            board.forEach(hand => {
-                hand.valid = false;
-                hand.removeHand = false;
-                if (!hand.used || !hand.removed) hand.points = 0;
-            });
-        });
-        setBoard([...scoreBoard])
         setRoll(0);
         setSlots(Slots());
+        setSelected(null);
         setRoundOver(false);
     };
 
@@ -64,13 +54,36 @@ const Yatzy = () => {
         setSlots([...slots], { slot });
     };
 
+    const shuffleSlots = () => {
+
+        const getRandomIndex = () => {
+            const min = Math.ceil(0);
+            const max = Math.floor(5);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        };
+
+        slots.forEach(slot => {
+            const index = getRandomIndex();
+            const randDice = Dice[index];
+            if (!slot.held) {
+                slot.value = randDice.value;
+                slot.image = randDice.image;
+            };
+            setSlots([...slots], { slot })
+        });
+
+        setRoll(prevRoll => prevRoll + 1);
+        if (roll + 1 === 3) endRound();
+    };
+
     const checkHands = () => {
 
-        const topHands = [...scoreBoard[0]];
-        const bottomHands = [...scoreBoard[1]];
+        const board = [...scoreBoard];
+        const topHands = board[0];
+        const bottomHands = board[1];
 
         const finalVals = slots.map(slot => slot.value).sort((a, b) => a - b);
-        // const finalVals = [2,2,3,3,3]
+        // const finalVals = [3, 3, 3, 3, 3]
 
         const valTotal = () => {
             let sum = 0;
@@ -174,7 +187,7 @@ const Yatzy = () => {
                                 bottomHands[6].valid = true;
                                 bottomHands[6].points = bottomHands[6].value;
                             }
-                            else if (!bottomHands[6].removed && bottomHands[6].used) {
+                            else if (bottomHands[6].used) {
                                 bottomHands[7].valid = true;
                                 bottomHands[7].points = bottomHands[7].value;
                             };
@@ -188,6 +201,20 @@ const Yatzy = () => {
             if (FHdouble && FHtriple) {
                 bottomHands[2].valid = true;
                 bottomHands[2].points = bottomHands[2].value;
+            };
+        };
+
+        const checkRemoval = () => {
+            let validHand = false;
+            board.forEach(array => {
+                array.forEach(hand => { if (hand.valid) validHand = true });
+            });
+            if (!validHand) {
+                board.forEach(array => {
+                    array.forEach(hand => {
+                        if (hand.hand !== 'Yatzy Bonus' && !hand.used && !hand.removed) hand.removeHand = true
+                    });
+                });
             };
         };
 
@@ -210,30 +237,51 @@ const Yatzy = () => {
         // Check Second Scoreboard
         checkDuplicates();
         checkStraights();
+        checkRemoval();
 
-        setBoard([[...topHands], [...bottomHands]]);
+        setBoard([...board]);
     };
 
-    const shuffleSlots = () => {
+    const selectHand = hand => {
+        const { board, index, points } = hand;
 
-        const getRandomIndex = () => {
-            const min = Math.ceil(0);
-            const max = Math.floor(5);
-            return Math.floor(Math.random() * (max - min + 1)) + min;
+        if (scoreBoard[board][index].valid) {
+            if (board === 1 && index === 7) { scoreBoard[board][index].count++ }
+            else { scoreBoard[board][index].used = true };
+        }
+        else if (scoreBoard[board][index].removeHand) {
+            scoreBoard[board][index].removed = true;
+            if (board === 1 && index === 6) scoreBoard[board][7].removed = true;
         };
 
-        slots.forEach(slot => {
-            const index = getRandomIndex();
-            const randDice = Dice[index];
-            if (!slot.held) {
-                slot.value = randDice.value;
-                slot.image = randDice.image;
-            };
-            setSlots([...slots], { slot })
+        if (scoreBoard[board][index].used) {
+            switch (board) {
+                case 0:
+                    setTopScore(prevScore => prevScore + points);
+                    break;
+                case 1:
+                    setBottomScore(prevScore => prevScore + points);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        handleClose();
+        setBoard([...scoreBoard]);
+        setSelected(hand);
+
+        let unused = false;
+
+        scoreBoard.forEach(board => {
+            board.forEach(hand => {
+                hand.valid = false;
+                hand.removeHand = false;
+                if (!hand.used && !hand.removed) unused = true;
+            });
         });
 
-        setRoll(prevRoll => prevRoll + 1);
-        if (roll + 1 === 3) endRound();
+        if (!unused) alert('gameOver')
     };
 
     return (
@@ -249,7 +297,7 @@ const Yatzy = () => {
                 roll={roll}
                 roundOver={roundOver}
                 gameOver={gameOver}
-                selected={selected}
+                selectedHand={selectedHand}
                 shuffleSlots={shuffleSlots}
                 startGame={startGame}
                 nextRound={nextRound}
@@ -257,15 +305,17 @@ const Yatzy = () => {
             />
 
             <BoardRow
-                handleShow={handleShow}
                 scoreBoard={scoreBoard}
-                totalHandPoints={totalHandPoints}
+                topScore={topScore}
+                bottomScore={bottomScore}
+                handleShow={handleShow}
             />
 
             <HandModal
                 show={showModal}
                 modalContent={modalContent}
                 handleClose={handleClose}
+                selectHand={selectHand}
             />
         </Container>
     );

@@ -16,7 +16,7 @@ const HandRow = ({ hand, board, index, handleShow }) => {
     return (
         <Row
             style={{
-                margin: '1%',
+                margin: '.5%',
                 border: 'solid black'
             }}
             className={

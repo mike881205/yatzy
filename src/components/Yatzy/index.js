@@ -22,6 +22,8 @@ const Yatzy = () => {
     const [topScore, setTopScore] = useState(0);
     const [bottomScore, setBottomScore] = useState(0);
 
+    const finalModalObj = {topScore, bottomScore}
+
     const handleClose = () => {
         setSelected(nullHand());
         setShow(false);
@@ -50,9 +52,13 @@ const Yatzy = () => {
         checkHands();
     };
 
-    const endGame =() => setGameOver(true)
+    const endGame =() => {
+        setGameOver(true);
+        setShow(true);
+    };
     
     const resetGame =()=> {
+        setShow(false);
         setBoard([topHands(), bottomHands()]);
         setSlots(Slots());
         setRoll(0);
@@ -249,6 +255,8 @@ const Yatzy = () => {
         // Check Second Scoreboard
         checkDuplicates();
         checkStraights();
+
+        // Check for hands to be removed
         checkRemoval();
 
         setBoard([...board]);
@@ -306,10 +314,10 @@ const Yatzy = () => {
             };
         };
 
-        handleClose();
+        setSelected(hand);
         resetBoard();
         setBoard([...scoreBoard]);
-        setSelected(hand);
+        setShow(false);
         checkGameOver();
     };
 
@@ -328,7 +336,6 @@ const Yatzy = () => {
                 gameOver={gameOver}
                 selectedHand={selectedHand}
                 validHand={validHand}
-                resetGame={resetGame}
                 shuffleSlots={shuffleSlots}
                 startGame={startGame}
                 nextRound={nextRound}
@@ -345,6 +352,9 @@ const Yatzy = () => {
             <HandModal
                 show={showModal}
                 selectedHand={selectedHand}
+                finalModalObj={finalModalObj}
+                gameOver={gameOver}
+                resetGame={resetGame}
                 handleClose={handleClose}
                 selectHand={selectHand}
             />

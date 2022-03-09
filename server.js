@@ -7,13 +7,10 @@ const path = __dirname + '/app/views/';
 db = require("./app/models");
 
 app.use(express.static(path));
-var corsOptions = {
-  origin: "http://localhost:8081"
-};
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 db.sequelize.sync();
-app.get('/', function (req,res) {
+app.get('/', (req, res) => {
   res.sendFile(path + "index.html");
 });
 app.use(routes);
